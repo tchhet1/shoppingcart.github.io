@@ -58,6 +58,7 @@
 				right: 0;
 				z-index: 100;
 				background-color: #000000;
+                opacity: 0.85;
 			}
 			
 			.cart-section {
@@ -68,8 +69,8 @@
 			}
 			
 			.full-screen-cart {
-				 background-color: rgb(0,0,0);
-				 background-color: rgba(0,0,0, 0.9);
+				
+				background-color: rgba(0,0,0, 0.7);
 				position: fixed;
 				top: 0;
 				right: 0;
@@ -87,8 +88,9 @@
 				top: 15%;
 				width: 95%;
 				height: auto;
-				background-color: gray;
+				background-color: #f1f1f1;
 				margin: 0 auto;
+				padding: 20px;
 			}
 			
 			.closebtn {
@@ -111,6 +113,11 @@
 				margin-bottom: 0 !important;
 				text-align: center;
 			}
+			
+			.removeItem {
+				font-size: 20px;
+				cursor: pointer;
+			}
 		</style>
 	</head>
 	<body>
@@ -123,35 +130,44 @@
 </nav>
 <div class="full-screen-cart" id="myCart">
 	
-			<span class="closebtn" onclick="closeNav()">&times;</span>
+			
 			<div class="overlay-content">
+				<span class="closebtn" onclick="closeNav()">&times;</span>
 				<div class="cart-section ">
+                    
 					<h2 class="text-center">My Shopping Cart</h2>
 					<div class="row">
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<p class="text-center"><b>Product</b></p>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<p class="text-center"><b>Quantity</b></p>
 							<p id="totalQty"></p>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<p class="text-center"><b>Price</b></p>
+							<p id="totalPrice"></p>
+						</div>
+						<div class="col-sm-3">
+							<p class="text-center"></p>
 							<p id="totalPrice"></p>
 						</div>	
 					</div>
+                    <div class="Items-section">
+                    
+                    </div>
 				</div>
 		
 				<div class="total-price">
 					<div class="row">
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<p class="text-center"><b>Total</b></p>
 						</div>
 						
-						<div class="col-sm-4">
+						<div class="col-sm-6">
 						</div>
 						
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<p class="total text-center">0.00</p>
 						</div>
 						
@@ -273,68 +289,74 @@ document.addEventListener('DOMContentLoaded', function(event){
 	
 	window.addEventListener('scroll', function(){
 		if(window.scrollY > 0){
-			navbar.classList.add('fixed-nav');
-			//console.log("dark nav")		
-			
+			navbar.classList.add('fixed-nav');			
 		} else {
-			navbar.classList.remove('fixed-nav');
-			//console.log('light nav');
+			navbar.classList.remove('fixed-nav');	
 		}
 				
-	}); // navbar color change when scrolled
+	}); //navbar color changes and is fixed to the top when scrolled
 	 
 	 
-	 
-	 
+	
+/*
+	for(let i=0; i<rem.length; i++){
+		
+		rem[i].onclick = function(){
+		console.log('jjj');
+		//this.parentElement.parentElement.parentElement.removeChild(this.parentElement.parentElement);
+		}
+	}
+*/
+	
+		 
 	 let addToCartBtn = document.querySelectorAll('.addCart');
 	 let inputQty = document.querySelectorAll('.quantity');
 	  
-	 let counter = 0;
+	 var counter = 0;
 	 
 	 let totalQty = document.getElementById('totalQty');
 	 let totalPrice = document.getElementById('totalPrice');
 	 
 	 let itemNotify = document.querySelector('.fa-shopping-cart');
-	 
-	 let cartDisplay = document.querySelector('.cart-section');
+	 let totalElem = document.querySelector('.total');
+	 var cartDisplay = document.querySelector('.cart-section');
 	 
 	 addToCartBtn.forEach(function(btn, index){
 		 btn.addEventListener('click', function(event){
-			 console.log('Btn Clicked ' + index);
-			 counter++;
-			 console.log("inside Counter: " + counter);
-			 console.log(event.target);
-			 console.log(event.target.name)
-			 
-			 
-			 
+			 //console.log('Btn Clicked ' + index);
+			 //counter++;
+			 //console.log("inside Counter: " + counter);
+			 //console.log(event.target);
+			 //console.log(event.target.name)
+
 			 var qtyAdded = document.getElementsByClassName('qtyAdded');
 			 function totalNumItems(){
-				
 				 let qtyValue =  Number(event.target.previousElementSibling.value);
 				 for(let i=0; i<qtyAdded.length; i++){
 					 qtyValue += parseInt(qtyAdded[i].innerHTML, 10);
+                     //console.log(qtyValue);
 				 }
-				 console.log("qunatities: " + qtyValue)
+				 //console.log("qunatities: " + qtyValue)
 				 return qtyValue;
 			 } // displays the total items added in the cart in cart icon
 			 
 			 itemNotify.innerHTML = " &ndash; " + totalNumItems();
 			 
 			 let itemPrice = event.target.parentNode.previousElementSibling.innerHTML;
-			 let totalItemPrice = Number(itemPrice) * Number(event.target.previousElementSibling.value);
 			 
-			 let totalElem = document.querySelector('.total');
+             let totalItemPrice = Number(itemPrice) * Number(event.target.previousElementSibling.value);
+			 
+			 
 			
 			 var itemPriceElem = document.getElementsByClassName('item-price');
 			 
 			 function estimatedTotal(){ 
-				  var sum = totalItemPrice;
+				let sum = totalItemPrice;
 				 for(let i=0; i<itemPriceElem.length; i++){
 					 sum += parseInt(itemPriceElem[i].innerHTML, 10);
 				 }
 				 console.log(sum);
-				 return sum;
+				 return '$' + sum;
 			 } //function that returns the total amount of product price in cart
 			 
 			 totalElem.innerHTML =  estimatedTotal();
@@ -343,51 +365,116 @@ document.addEventListener('DOMContentLoaded', function(event){
 			 cartDisplay.innerHTML += 
 			 
 `
-			 	<div class="row">
-				
-				
-				
-				<div class="col-sm-4">
+			 <div class="row cart-items">	
+				<div class="col-sm-3">
 					<p class="text-center">${event.target.name}</p>
 					
 				</div>
-				<div class="col-sm-4">
+
+				<div class="col-sm-3">
 					<p class="text-center qtyAdded">${Number(event.target.previousElementSibling.value)}</p>
 					<p id="totalQty"></p>
 				</div>
-				<div class="col-sm-4">
+
+				<div class="col-sm-3">
 					<p class="text-center item-price">${totalItemPrice}</p>
 					
 				</div>
-				
-				
-				
+
+				<div class="col-sm-3">
+					<p class="text-center removeItem">X</p>
+					
+				</div>	
 			</div>
  `
 			 //console.log(event.target.previousElementSibling.value);
 			 
-			 
-		 }); //adding click event to cart buttons
+			//console.log(removeIcon); 
+			//console.log(rem[0]);
+			//openNav();
+		 }); //displaying the cart in a modal adding click event to cart buttons
 		 
 	 });//for each fucntion to loop through btns
-	 
+
+	 //removes the item when clicked
+	let removeIcon = document.querySelectorAll('.removeItem');
+	//var rem = document.getElementsByClassName('removeItem');
+	
+	
+    cartDisplay.addEventListener('click', function(e){
+        
+        let removeTarget = e.target.parentNode.parentNode;
+        let cartItems = document.querySelectorAll('.cart-items');
+
+        
+		if(e.target.classList.contains('removeItem')){
+            
+            removeTarget.parentNode.removeChild(removeTarget);
+            
+            let newTotal;
+         
+           // console.log(totalElem.textContent.substring(1));
+            
+            for(let i=0; i<=cartItems.length; i++){
+                newTotal = Number(totalElem.textContent.substring(1));
+                console.log(newTotal + 'new');
+                newTotal -= Number(e.target.parentNode.previousElementSibling.textContent);
+                console.log(newTotal);
+                
+                totalElem.innerHTML = '$' + newTotal;
+                //console.log(cartItems[i]);
+                break;
+            }
+            
+            
+        } //removes each item from the cart when X is clicked and deducts from the total amount
+          
+        
+    });
+    
+    
+    
+    
+    /*This functions is supposed to remove the item when x is clicked plus also make changes to the item notification icon
+    document.addEventListener('click', function(e){
+		
+		var removeTarget = e.target.parentNode.parentNode;
+		if(e.target.classList.contains('removeItem')){
+            
+			removeTarget.parentNode.removeChild(removeTarget);
+			//counter--;
+			//console.log(itemNotify.innerHTML.substring(3, itemNotify.innerHTML.length + 1));
+			
+			let itemNotifyMinus = itemNotify.innerHTML.substring(3, itemNotify.innerHTML.length + 1);
+			console.log("items: " + itemNotifyMinus);
+			itemNotifyMinus = itemNotifyMinus - 1;
+			
+			itemNotify.innerHTML = itemNotifyMinus;
+			console.log("item removed from cart " + itemNotifyMinus);
+			
+		}
+	});
+    */
+    
+    
+
+ 
 		 
  }); //DOM Content loaded function ends
 
 
-//opens up full width shopping cart	 
-function openNav() {
-  document.getElementById("myCart").style.width = "100%";
-}
-
-//closes shppping cart info 
-function closeNav() {
-  document.getElementById("myCart").style.width = "0%";
-}
+	//opens up full width shopping cart	 
+	function openNav() {
+	  document.getElementById("myCart").style.width = "100%";
+	}
 	
+	//closes shppping cart info 
+	function closeNav() {
+	  document.getElementById("myCart").style.width = "0%";
+	}
 	 
-	 </script>
-	</body>
+</script>
+</body>
 </html>
 
 
