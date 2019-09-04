@@ -332,22 +332,19 @@ document.addEventListener('DOMContentLoaded', function(event){
 			 var qtyAdded = document.getElementsByClassName('qtyAdded');
 			 function totalNumItems(){
 				 let qtyValue =  Number(event.target.previousElementSibling.value);
+                 
 				 for(let i=0; i<qtyAdded.length; i++){
 					 qtyValue += parseInt(qtyAdded[i].innerHTML, 10);
-                     //console.log(qtyValue);
+                    
 				 }
-				 //console.log("qunatities: " + qtyValue)
 				 return qtyValue;
+                  console.log(qtyValue);
 			 } // displays the total items added in the cart in cart icon
-			 
+			
 			 itemNotify.innerHTML = " &ndash; " + totalNumItems();
 			 
 			 let itemPrice = event.target.parentNode.previousElementSibling.innerHTML;
-			 
              let totalItemPrice = Number(itemPrice) * Number(event.target.previousElementSibling.value);
-			 
-			 
-			
 			 var itemPriceElem = document.getElementsByClassName('item-price');
 			 
 			 function estimatedTotal(){ 
@@ -355,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function(event){
 				 for(let i=0; i<itemPriceElem.length; i++){
 					 sum += parseInt(itemPriceElem[i].innerHTML, 10);
 				 }
-				 console.log(sum);
+				 //console.log(sum);
 				 return '$' + sum;
 			 } //function that returns the total amount of product price in cart
 			 
@@ -412,19 +409,32 @@ document.addEventListener('DOMContentLoaded', function(event){
             removeTarget.parentNode.removeChild(removeTarget);
             
             let newTotal;
+            let newTotalQty;
+            console.log(newTotalQty);
          
            // console.log(totalElem.textContent.substring(1));
             
             for(let i=0; i<=cartItems.length; i++){
                 newTotal = Number(totalElem.textContent.substring(1));
-                console.log(newTotal + 'new');
+                
+                newTotalQty = Number(itemNotify.textContent.substring(3));
+                //console.log(newTotalQty);
+                let qtyInCart = e.target.parentNode.previousElementSibling.previousElementSibling.firstElementChild;
+                
                 newTotal -= Number(e.target.parentNode.previousElementSibling.textContent);
-                console.log(newTotal);
+                //console.log(newTotal);
                 
                 totalElem.innerHTML = '$' + newTotal;
                 //console.log(cartItems[i]);
+                
+                newTotalQty -= Number(qtyInCart.textContent); 
+                
+                itemNotify.innerHTML = " &ndash; " + newTotalQty;
+                console.log(e.target.parentNode.previousElementSibling.previousElementSibling.firstElementChild.innerText);
                 break;
             }
+            
+            
             
             
         } //removes each item from the cart when X is clicked and deducts from the total amount
